@@ -9,9 +9,9 @@ namespace PetAPI.Controllers;
 //   - it automatically returns 400 Bad Request if the request data is invalid, and
 //   - it reads complex parameters from the request body or form for us.
 // The [Route] attribute sets the base URL for every action in this class,
-// so "api/pet" is the start of every endpoint below.
+// so "api/pets" is the start of every endpoint below.
 [ApiController]
-[Route("api/pet")]
+[Route("api/pets")]
 public class PetController : ControllerBase
 {
     // The controller does not talk to the database directly. It asks an
@@ -29,12 +29,12 @@ public class PetController : ControllerBase
     }
 
     // ---------------------------------------------------------------
-    // GET /api/pet/all
+    // GET /api/pets
     // Returns every pet in the database.
     //   Request body: none
     //   Response:     200 OK with a JSON array of pets, e.g. [{"id":1,...}, ...]
     // ---------------------------------------------------------------
-    [HttpGet("all")]
+    [HttpGet]
     public async Task<ActionResult<ICollection<Pet>>> GetAll()
     {
         // "await" pauses this method while the database works, so the server
@@ -46,15 +46,15 @@ public class PetController : ControllerBase
     }
 
     // ---------------------------------------------------------------
-    // GET /api/pet/one/{id}
+    // GET /api/pets/{id}
     // Returns a single pet. The {id} part of the URL is read into the "id" parameter.
-    //   Example: GET /api/pet/one/2
+    //   Example: GET /api/pets/2
     //   Request body: none
     //   Response:     200 OK with one pet object, or 404 Not Found if no pet has that id
     // ---------------------------------------------------------------
     // The ":int" constraint means "only match when {id} is a whole number".
     // "Name" gives this route a name, so other actions can link to it (see Create).
-    [HttpGet("one/{id:int}", Name = "GetPetById")]
+    [HttpGet("{id:int}", Name = "GetPetById")]
     public async Task<ActionResult<Pet>> GetOne(int id)
     {
         var pet = await _repository.ReadAsync(id);
@@ -64,13 +64,13 @@ public class PetController : ControllerBase
     }
 
     // ---------------------------------------------------------------
-    // POST /api/pet/create
+    // POST /api/pets
     // Adds a new pet. POST is the usual verb for "create something new".
     //   Request body: form-data fields "Name" and "Weight" (Id is ignored)
     //   Response:     201 Created with the new pet, including its generated Id.
     //                 The Location header gives the URL of the new pet.
     // ---------------------------------------------------------------
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<ActionResult<Pet>> Create([FromForm] Pet newPet)
     {
         // [FromForm] tells ASP.NET Core to read the pet's fields from the
@@ -87,13 +87,13 @@ public class PetController : ControllerBase
     }
 
     // ---------------------------------------------------------------
-    // PUT /api/pet/update/{id}
+    // PUT /api/pets/{id}
     // Replaces the Name and Weight of an existing pet. PUT is the usual verb for "update".
-    //   Example: PUT /api/pet/update/3
+    //   Example: PUT /api/pets/3
     //   Request body: form-data fields "Name" and "Weight".
     //   Response:     204 No Content on success (no body), or 404 Not Found if the Id does not exist.
     // ---------------------------------------------------------------
-    [HttpPut("update/{id:int}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromForm] Pet updatedPet)
     {
         // The pet to change is identified by the id.
@@ -104,13 +104,13 @@ public class PetController : ControllerBase
     }
 
     // ---------------------------------------------------------------
-    // DELETE /api/pet/delete/{id}
+    // DELETE /api/pets/{id}
     // Removes a pet. DELETE is the usual verb for "remove something".
-    //   Example: DELETE /api/pet/delete/3
+    //   Example: DELETE /api/pets/3
     //   Request body: none
     //   Response:     204 No Content on success (no body), or 404 Not Found if the Id does not exist.
     // ---------------------------------------------------------------
-    [HttpDelete("delete/{id:int}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var deleted = await _repository.DeleteAsync(id);
