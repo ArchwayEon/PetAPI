@@ -87,17 +87,17 @@ public class PetController : ControllerBase
     }
 
     // ---------------------------------------------------------------
-    // PUT /api/pet/update
+    // PUT /api/pet/update/{id}
     // Replaces the Name and Weight of an existing pet. PUT is the usual verb for "update".
-    //   Request body: form-data fields "Id", "Name" and "Weight".
-    //                 The Id says which pet to change.
+    //   Example: PUT /api/pet/update/3
+    //   Request body: form-data fields "Name" and "Weight".
     //   Response:     204 No Content on success (no body), or 404 Not Found if the Id does not exist.
     // ---------------------------------------------------------------
-    [HttpPut("update")]
-    public async Task<IActionResult> Update([FromForm] Pet updatedPet)
+    [HttpPut("update/{id:int}")]
+    public async Task<IActionResult> Update(int id, [FromForm] Pet updatedPet)
     {
-        // The pet to change is identified by the Id sent in the form data.
-        var updated = await _repository.UpdateAsync(updatedPet.Id, updatedPet);
+        // The pet to change is identified by the id.
+        var updated = await _repository.UpdateAsync(id, updatedPet);
 
         // 204 No Content means "it worked, and there is nothing to send back."
         return updated ? NoContent() : NotFound();
