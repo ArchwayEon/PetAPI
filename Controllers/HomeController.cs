@@ -11,6 +11,12 @@ public class HomeController : Controller
         return View();
     }
 
+    // Demo page that consumes the Pet Web API with AJAX (fetch).
+    public IActionResult Pets()
+    {
+        return View();
+    }
+
     public IActionResult Privacy()
     {
         return View();
